@@ -9,7 +9,7 @@ permissions:
 
 env:
   CARGO_PROFILE_DEV_DEBUG: 0
-  EXPECTED_SOURCE: 38e555fa33b2d40988752839451caa32ea2ea103
+  EXPECTED_SOURCE: deeae531443ff1dc0f5370e1ad9076a8044df8d6
 
 jobs:
   lint:
@@ -19,12 +19,10 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
-          fetch-depth: 2
+          ref: ${{ env.EXPECTED_SOURCE }}
           persist-credentials: false
       - name: Select the signed feature source
-        run: |
-          test "$(git rev-parse HEAD^)" = "$EXPECTED_SOURCE"
-          git checkout --detach "$EXPECTED_SOURCE"
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
       - name: Install the repository toolchains
         run: |
           rustup update --no-self-update
@@ -46,12 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
-          fetch-depth: 2
+          ref: ${{ env.EXPECTED_SOURCE }}
           persist-credentials: false
       - name: Select the signed feature source
-        run: |
-          test "$(git rev-parse HEAD^)" = "$EXPECTED_SOURCE"
-          git checkout --detach "$EXPECTED_SOURCE"
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
       - name: Install the repository toolchain
         run: rustup update --no-self-update
       - name: Verify waiting for import and refusing a later transport batch
